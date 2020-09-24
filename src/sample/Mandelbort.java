@@ -1,9 +1,11 @@
 package sample;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 public class Mandelbort {
+    public static boolean[][] Mas=new boolean[][]{};
     static int BAILOUT = 16;
     static int MAX_ITERATIONS = 1000;
 
@@ -21,38 +23,59 @@ public class Mandelbort {
             float zi2 = zi * zi;
             zr = zr2 - zi2 + cr;
             zi = temp + temp + ci;
-            if (zi2 + zr2 > BAILOUT)
+            if (zi2 + zr2 > BAILOUT) {
                 return i;
-            if (i > max_i)
+            }
+            if(i >max_i){
                 return 0;
+            }
         }
     }
+public static void main(String[] args) throws  InterruptedException{
 
-    public static ArrayList<Long> count()
-    {
-        Date d1 = new Date();
-        int x,y;
-        ArrayList<Long> ls=new ArrayList<Long>(){};
-        int[] param={1000,10000,100000,1000000};
-        for(int i=0;i<param.length;i++) {
+        ArrayList<Long> as=count();
+        for(int i=0;i<4;i++)
+            System.out.println(as.get(i));
+
+
+}
+    public static ArrayList<Long> count() throws InterruptedException {
+        long border = 0;
+        long empty = 0;
+        long inside = 0;
+        int[] param = {1000, 10000, 100000, 1000_000};
+        boolean [][] mas=new boolean[80][80];
+        int x, y;
+        ArrayList<Long> ls = new ArrayList<Long>() {
+        };
+        ArrayList<Long> ans = new ArrayList<>();
+        int c = 0;
+        for (int i = 0; i < param.length; i++){
+            long m = System.currentTimeMillis();
             for (y = -39; y < 39; y++) {
                 System.out.print("\n");
                 for (x = -39; x < 39; x++) {
-                    if (iterate(x / 40.0f, y / 40.0f,param[i]) == 0)
+                  if (iterate(x / 40.0f, y / 40.0f, param[i]) == 0) {
                         System.out.print("*");
-                    else
+                       mas[y+40][x+40]=true;
+                    } else {
                         System.out.print(" ");
-
+                        mas[y+40][x+40]=false;
+                    }
                 }
+
             }
-            Date d2 = new Date();
-            long diff = d2.getTime() - d1.getTime();
-            diff/=1000.0f;
-            ls.add(diff);
-
-        }
+        long diff = System.currentTimeMillis() - m;
+        ls.add(diff);
+    }
+       Mas=mas;
         return ls;
+    }
 
+    public static long measure(){
+        long l=System.currentTimeMillis();
+
+        return System.currentTimeMillis()-l;
     }
 }
 
